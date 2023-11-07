@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  db:
+    image: 'mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04'
+    container_name: mt_db_srv
+    restart: unless-stopped
+    #command:
+    #  - --disable-partition-engine-check
+    ports:
+      - '1433:1433'
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: 's8s!Np#m76LV#iN'
+      MSSQL_PID: 'Developer'
+    volumes:
+      - './volumes/mssql:/var/lib/mssql'
+    networks:
+      - mtdev_network
+
+networks:
+  mtdev_network:
+    driver: bridge
