@@ -16,7 +16,19 @@ services:
       - './volumes/mssql:/var/lib/mssql'
     networks:
       - mtdev_network
-
+  back:
+    build:
+      context: ./infra/back
+      dockerfile: Dockerfile
+    image: mt_app
+    container_name: mt_app_back
+    restart: unless-stopped
+    ports:
+      - "8089:8089"
+    volumes:
+      - './src/back:/app'
+    networks:
+      - mtdev_network
 networks:
   mtdev_network:
     driver: bridge
