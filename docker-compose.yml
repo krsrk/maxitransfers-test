@@ -13,11 +13,15 @@ services:
       MSSQL_SA_PASSWORD: 's8s!Np#m76LV#iN'
       MSSQL_PID: 'Developer'
     volumes:
-      - './volumes/mssql:/var/lib/mssql'
+      - './volumes/mssql/data:/var/lib/mssql'
+      - './volumes/mssql/init.sql:/docker-entrypoint-initdb.d/init.sql'
     networks:
       - mtdev_network
   back:
     build:
+      args:
+        user: 'krs'
+        uid: '1000'
       context: ./infra/back
       dockerfile: Dockerfile
     image: mt_app
