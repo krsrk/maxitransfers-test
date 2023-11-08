@@ -12,4 +12,4 @@ RUN pip3 install -r requirements.txt
 RUN useradd -G root -u $uid -d /app $user
 RUN chown -R $user:$user /app
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=8089"]
+CMD [ "python3", "-m" , "flask", "run", "--debug", "--host=0.0.0.0", "--port=8089"]

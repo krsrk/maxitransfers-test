@@ -1,6 +1,9 @@
-from flask import Flask, jsonify
+import sqlalchemy
+from flask import Flask, jsonify, request, abort
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+
+from repositories.EmployeeRepository import EmployeeRepository
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pymssql://sa:s8s!Np#m76LV#iN@db:1433/admin'
@@ -13,7 +16,6 @@ class Beneficiary(db.Model):
     name = db.Column(db.String(250), nullable=False)
     last_name = db.Column(db.String(550), nullable=False)
     birth_date = db.Column(db.Date, nullable=False)
-    employee_number = db.Column(db.String, nullable=False)
     curp = db.Column(db.String, nullable=False)
     ssn = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.String(10), nullable=False)
@@ -32,10 +34,30 @@ class Employee(db.Model):
     ssn = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.String(10), nullable=False)
     nationality = db.Column(db.String)
-    beneficiaries = db.relationship(Beneficiary, backref='employee', lazy=True)
+    beneficiaries = db.relationship(Beneficiary, backref='employee', lazy=True, cascade='all, delete-orphan')
 
-
-
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "last_name": self.last_name,
+            "birth_date": self.birth_date,
+            "curp": self.curp,
+            "ssn": self.ssn,
+            "phone_number": self.phone_number,
+            "nationality": self.nationality,
+            "beneficiaries": [{
+                "id": beneficiary.id,
+                "name": beneficiary.name,
+                "last_name": beneficiary.last_name,
+                "birth_date": beneficiary.birth_date,
+                "curp": beneficiary.curp,
+                "ssn": beneficiary.ssn,
+                "phone_number": beneficiary.phone_number,
+                "nationality": beneficiary.nationality,
+                "participation_percentage": beneficiary.participation_percentage
+            } for beneficiary in self.beneficiaries]
+        }
 
 
 @app.route('/')
@@ -43,5 +65,42 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
+@app.route('/api/employees')
+def get_employees():
+    result_set = EmployeeRepository(db, Employee).get_employees()
+    return jsonify(result_set)
+
+
+@app.route('/api/employee', methods=['POST'])
+def create_employees():
+    result_set = EmployeeRepository(db, Employee).create_employee(request.get_json())
+
+    if result_set['on_error']:
+        return jsonify({'message': result_set['error_message']}), 500
+
+    return jsonify({'message': result_set['message']}), 201
+
+
+@app.route('/api/employee', methods=['PUT'])
+def update_employees():
+    result_set = EmployeeRepository(db, Employee).update_employee(request.get_json())
+
+    if result_set['on_error']:
+        return jsonify({'message': result_set['error_message']}), 500
+
+    return jsonify({'message': result_set['message']}), 201
+
+
+@app.route('/api/employee', methods=['DELETE'])
+def delete_employees():
+    data = request.get_json()
+    result_set = EmployeeRepository(db, Employee).delete_employee(data['employee_id'])
+
+    if result_set['on_error']:
+        return jsonify({'message': result_set['error_message']}), 500
+
+    return jsonify({'message': result_set['message']}), 201
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
