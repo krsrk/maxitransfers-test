@@ -33,6 +33,19 @@ services:
       - './src/back:/app'
     networks:
       - mtdev_network
+  front:
+    build:
+      context: ./infra/front
+      dockerfile: Dockerfile
+    image: mt_front
+    container_name: mt_app_front
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - "./src/front:/app"
+    networks:
+      - mtdev_network
 networks:
   mtdev_network:
     driver: bridge
