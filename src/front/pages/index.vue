@@ -6,7 +6,7 @@
     <v-row>
       <v-col cols="6">
         <v-sheet rounded="lg">
-          <TheItems />
+          <TheItems :data="data"/>
         </v-sheet>
       </v-col>
       <v-col>
@@ -19,5 +19,14 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
+import { useEmployeeStore } from "~/src/stores/EmployeeStore"
 
+onBeforeMount( () => {
+    store.getEmployees()
+})
+
+const store = useEmployeeStore()
+
+const data = computed(() => store.getEmployeesData)
 </script>

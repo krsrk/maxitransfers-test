@@ -7,10 +7,10 @@
       <thead>
       <tr>
         <th class="text-left">
-          Nombre
+          No. Empleado
         </th>
         <th class="text-left">
-          Apellidos
+          Nombre
         </th>
         <th class="text-left">
           Acciones
@@ -19,11 +19,11 @@
       </thead>
       <tbody>
       <tr
-          v-for="item in itemsData"
-          :key="item.name"
+          v-for="item in props.data"
+          :key="item.id"
       >
-        <td>{{ item.name }}</td>
-        <td>{{ item.calories }}</td>
+        <td>{{ item.employee_number }}</td>
+        <td>{{ item.name +  item.last_name}}</td>
         <td>
           <v-icon
               size="small"

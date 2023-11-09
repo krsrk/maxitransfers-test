@@ -1,3 +1,7 @@
+import {EmployeesService} from "~/src/services/EmployeesService"
+
+const employeesService = new EmployeesService()
+
 export const useEmployeeStore = defineStore('EmployeeStore', {
     state: () => {
         return {
@@ -6,7 +10,7 @@ export const useEmployeeStore = defineStore('EmployeeStore', {
     },
     actions: {
         async getEmployees() {
-
+            this.$state.employees = await employeesService.getEmployees()
         },
         async createEmployee(data:Object) {
 
@@ -17,5 +21,8 @@ export const useEmployeeStore = defineStore('EmployeeStore', {
         async deleteEmployee(employeeId:any) {
 
         }
+    },
+    getters: {
+        getEmployeesData: state => state.employees
     }
 })

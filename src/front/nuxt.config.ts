@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
     devtools: {enabled: false},
     imports: {
-        dirs: ['@/src/stores'],
+        dirs: ['~/src/front/stores'],
     },
     modules: [
         [
