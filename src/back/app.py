@@ -2,11 +2,13 @@ import sqlalchemy
 from flask import Flask, jsonify, request, abort
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 from repositories.EmployeeRepository import EmployeeRepository
 from repositories.BeneficiaryRepository import BeneficiaryRepository
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pymssql://sa:s8s!Np#m76LV#iN@db:1433/admin'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
