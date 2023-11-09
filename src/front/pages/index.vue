@@ -1,5 +1,9 @@
 <template>
-  <h3>Empleados</h3>
+  <div>
+    <h2>
+      Empleados
+    </h2>
+  </div>
 </template>
 
 <script lang="ts" setup>
