@@ -58,6 +58,7 @@ class Employee(db.Model):
             "name": self.name,
             "last_name": self.last_name,
             "birth_date": self.birth_date,
+            "employee_number": self.employee_number,
             "curp": self.curp,
             "ssn": self.ssn,
             "phone_number": self.phone_number,
