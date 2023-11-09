@@ -5,7 +5,7 @@
           <v-app-bar-title>Admin Empleados</v-app-bar-title>
         </v-app-bar>
 
-        <v-main>
+        <v-main class="bg-grey-lighten-3">
             <v-container>
                 <slot />
             </v-container>
