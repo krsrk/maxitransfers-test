@@ -6,12 +6,20 @@
     <v-row>
       <v-col cols="6">
         <v-sheet rounded="lg">
-          <TheItems :data="data" :beneficiary-context="true"/>
+          <TheItems
+              :data="data"
+              :beneficiary-context="true"
+              @edit-item-action="setFormData"
+          />
         </v-sheet>
       </v-col>
       <v-col>
         <v-sheet rounded="lg">
-          <TheForm :beneficiary-context="true"/>
+          <TheForm
+              :beneficiary-context="true"
+              @submit-form="sendFormToCreateService"
+              @submit-edit-form="sendFormToUpdateService"
+          />
         </v-sheet>
       </v-col>
     </v-row>
@@ -27,6 +35,7 @@ const route = useRoute()
 const store = useBeneficiaryStore()
 const formStore = useFormStore()
 const employee = route.params.id.split('-')
+const data = computed(() => store.getBeneficiariesData)
 
 formStore.$state.formTitle = 'Agregar Beneficiario'
 
@@ -34,5 +43,18 @@ onBeforeMount( () => {
     store.getBeneficiaries(employee[0])
 })
 
-const data = computed(() => store.getBeneficiariesData)
+const sendFormToCreateService = async (form:any) => {
+  await store.createBeneficiary(employee[0], form)
+}
+
+const sendFormToUpdateService = async (form:any) => {
+  await store.updateBeneficiary(employee[0], form)
+}
+
+const setFormData = async (it: any) => {
+  await formStore.setBeneficiaryForm(it)
+  formStore.$state.editForm = true
+  formStore.$state.formTitle = 'Editar Beneficiario'
+  formStore.$state.formButtonTitle = 'Editar'
+}
 </script>

@@ -44,18 +44,32 @@
               required
           ></v-text-field>
         </v-col>
-
-        <v-col
-            cols="12"
-            md="6"
-        >
-          <v-text-field
-              v-model="form.employee_number"
-              label="No. Empleado"
-              hide-details
-              required
-          ></v-text-field>
-        </v-col>
+        <template v-if="!props.beneficiaryContext">
+          <v-col
+              cols="12"
+              md="6"
+          >
+            <v-text-field
+                v-model="form.employee_number"
+                label="No. Empleado"
+                hide-details
+                required
+            ></v-text-field>
+          </v-col>
+        </template>
+        <template v-else>
+          <v-col
+              cols="12"
+              md="6"
+          >
+            <v-text-field
+                v-model="form.participation_percentage"
+                label="Porcentaje de Participación"
+                hide-details
+                required
+            ></v-text-field>
+          </v-col>
+        </template>
       </v-row>
 
       <v-row>
@@ -130,6 +144,7 @@
 import { useFormStore } from "~/src/stores/FormStore"
 
 const store = useFormStore()
+const props = defineProps({ beneficiaryContext: Boolean })
 const emit = defineEmits(['submitForm', 'submitEditForm'])
 const form = computed(() => store.$state.form)
 const formTitle = computed(() => store.$state.formTitle)

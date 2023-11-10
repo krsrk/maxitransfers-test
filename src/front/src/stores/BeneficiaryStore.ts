@@ -17,8 +17,9 @@ export const useBeneficiaryStore = defineStore('BeneficiaryStore', {
             await beneficiaryService.createBeneficiary(employeeId, data)
             await this.getBeneficiaries(employeeId)
         },
-        async updateBeneficiary(data:Object) {
-
+        async updateBeneficiary(employeeId:any, data:Object) {
+            await beneficiaryService.updateBeneficiary(data)
+            await this.getBeneficiaries(employeeId)
         },
         async deleteBeneficiary(beneficiaryId:any) {
 

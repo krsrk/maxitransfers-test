@@ -40,4 +40,20 @@ export class BeneficiariesService {
             }
         }
     }
+
+    async updateBeneficiary(formData:any) {
+        try {
+            const urlService = this.baseUrl + `/beneficiaries`
+            const { data } = await this.request.put(urlService, formData)
+            data.status = 'OK'
+
+            return data
+        } catch (e) {
+            console.log(e)
+            return {
+                status: 'ERR',
+                message: 'Something wrong happer, try again later!'
+            }
+        }
+    }
 }
