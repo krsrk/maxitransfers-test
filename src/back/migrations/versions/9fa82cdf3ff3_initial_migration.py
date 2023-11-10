@@ -78,7 +78,7 @@ def upgrade():
             @employee_id int
         AS
         BEGIN
-            INSERT INTO beneficiary (name, last_name, birth_date, employee_number, curp, ssn, phone_number, nationality, participation_percentage, employee_id) values (@name, @last_name, @birth_date, @employee_number, @curp, @ssn, @phone_number, @nationality, @participation_percentage, @employee_id)
+            INSERT INTO beneficiary (name, last_name, birth_date, curp, ssn, phone_number, nationality, participation_percentage, employee_id) values (@name, @last_name, @birth_date, @curp, @ssn, @phone_number, @nationality, @participation_percentage, @employee_id)
             RETURN 0
         END;
     """)
@@ -115,7 +115,7 @@ def upgrade():
             @participation_percentage int
         AS
         BEGIN
-            UPDATE beneficiary SET name=@name, last_name=@last_name, birth_date=@birth_date, employee_number=@employee_number, curp=@curp, ssn=@ssn, phone_number=@phone_number, nationality=@nationality, participation_percentage=@participation_percentage
+            UPDATE beneficiary SET name=@name, last_name=@last_name, birth_date=@birth_date, curp=@curp, ssn=@ssn, phone_number=@phone_number, nationality=@nationality, participation_percentage=@participation_percentage
             WHERE id = @beneficiary_id
             RETURN 0
         END; 

@@ -12,9 +12,10 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: 's8s!Np#m76LV#iN'
       MSSQL_PID: 'Developer'
+    working_dir: /app
     volumes:
       - './volumes/mssql/data:/var/lib/mssql'
-      - './volumes/mssql/init.sql:/docker-entrypoint-initdb.d/init.sql'
+      - './volumes/mssql/init.sql:/app/init.sql'
     networks:
       - mtdev_network
   back:
