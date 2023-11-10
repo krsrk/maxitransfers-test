@@ -1,4 +1,5 @@
 import axios from './axios'
+import {integer} from "vscode-languageserver-types";
 
 
 export class BeneficiariesService {
@@ -45,6 +46,26 @@ export class BeneficiariesService {
         try {
             const urlService = this.baseUrl + `/beneficiaries`
             const { data } = await this.request.put(urlService, formData)
+            data.status = 'OK'
+
+            return data
+        } catch (e) {
+            console.log(e)
+            return {
+                status: 'ERR',
+                message: 'Something wrong happer, try again later!'
+            }
+        }
+    }
+
+    async deleteBeneficiary(benefiaryId:integer) {
+        try {
+            const urlService = this.baseUrl + `/beneficiaries`
+            const { data } = await this.request.delete(urlService, {
+                data: {
+                    beneficiary_id: benefiaryId
+                }
+            })
             data.status = 'OK'
 
             return data

@@ -10,6 +10,7 @@
               :data="data"
               :beneficiary-context="true"
               @edit-item-action="setFormData"
+              @delete-item-action="deleteItemClickHandler"
           />
         </v-sheet>
       </v-col>
@@ -56,5 +57,9 @@ const setFormData = async (it: any) => {
   formStore.$state.editForm = true
   formStore.$state.formTitle = 'Editar Beneficiario'
   formStore.$state.formButtonTitle = 'Editar'
+}
+
+const deleteItemClickHandler = async (it:any) => {
+  await store.deleteBeneficiary(employee[0], it.id)
 }
 </script>
