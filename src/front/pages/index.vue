@@ -63,5 +63,7 @@ const deleteItemClickHandler = async (it:any) => {
 const goToBeneficiariesClickHandler = async (it:any) => {
   await navigateTo('/beneficiarios/' + it.id + '-' + it.name)
   await formStore.setForm({})
+  formStore.$state.editForm = false
+  formStore.$state.formButtonTitle = 'Agregar'
 }
 </script>

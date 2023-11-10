@@ -133,10 +133,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useFormStore } from "~/src/stores/FormStore"
+import {useFormStore} from "~/src/stores/FormStore"
+import {useBeneficiaryStore} from "~/src/stores/BeneficiaryStore"
 
 const store = useFormStore()
-const props = defineProps({ beneficiaryContext: Boolean })
+const beneficiaryStore = useBeneficiaryStore()
+const props = defineProps({beneficiaryContext: Boolean})
 const emit = defineEmits(['submitForm', 'submitEditForm'])
 const form = computed(() => store.$state.form)
 const formTitle = computed(() => store.$state.formTitle)
@@ -145,37 +147,37 @@ const editForm = computed(() => store.$state.editForm)
 const validForm = ref(false)
 
 const birthdateRules = ref([
-    (value: any) => {
-          if (value) return true
+  (value: any) => {
+    if (value) return true
 
-          return 'Campo requerido.'
-    },
-    (value: any) => {
-          const now = new Date()
-          let birthdate = new Date(value)
-          let age = now.getFullYear() - birthdate.getFullYear()
-          let m = now.getMonth() - birthdate.getMonth()
-          if (m < 0 || (m === 0 && now.getDate() < birthdate.getDate())) {
-              age--;
-          }
+    return 'Campo requerido.'
+  },
+  (value: any) => {
+    const now = new Date()
+    let birthdate = new Date(value)
+    let age = now.getFullYear() - birthdate.getFullYear()
+    let m = now.getMonth() - birthdate.getMonth()
+    if (m < 0 || (m === 0 && now.getDate() < birthdate.getDate())) {
+      age--;
+    }
 
-          if (age >= 18) return true
+    if (age >= 18) return true
 
-          return 'Debes ser mayor de edad'
-    },
+    return 'Debes ser mayor de edad'
+  },
 ])
 
 const phoneRules = ref([
-    (value: any) => {
-          if (value) return true
+  (value: any) => {
+    if (value) return true
 
-          return 'Campo requerido.'
-    },
-    (value: any) => {
-        if (value?.length == 10 && /[0-9-]+/.test(value)) return true
+    return 'Campo requerido.'
+  },
+  (value: any) => {
+    if (value?.length == 10 && /[0-9-]+/.test(value)) return true
 
-        return 'Telefono solo debe 10 digitos.'
-    }
+    return 'Telefono solo debe 10 digitos.'
+  }
 ])
 
 const requiredRules = ref([
@@ -192,6 +194,11 @@ const submitForm = async () => {
     return
   }
 
+  if (beneficiaryStore.isParticipationPercentageOutOfLimit(editForm.value, form.value)) {
+    alert('Se supero el limite de 100 en porcentaje de participación')
+    return
+  }
+
   if (!editForm.value) {
     await emit('submitForm', form.value)
   } else {
@@ -204,7 +211,7 @@ const submitForm = async () => {
 const clearForm = async () => {
   await store.setForm({})
   store.$state.editForm = false
-  store.$state.formTitle = 'Agregar Empleado'
+  store.$state.formTitle = (props.beneficiaryContext) ? 'Agregar Beneficiario' : 'Agregar Empleado'
   store.$state.formButtonTitle = 'Agregar'
 }
 </script>
