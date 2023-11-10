@@ -1,5 +1,12 @@
 <template>
   <div>
+    <v-row>
+      <v-col cols="12">
+        <a href="/" type="button" class="secondary mt-2">
+            Regresar
+        </a>
+      </v-col>
+    </v-row>
     <h2>
       Beneficiarios del Empleado {{ employee[1] }}
     </h2>
