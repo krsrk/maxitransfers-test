@@ -11,6 +11,7 @@
               :beneficiary-context="false"
               @edit-item-action="setFormData"
               @delete-item-action="deleteItemClickHandler"
+              @go-to-beneficiaries-action="goToBeneficiariesClickHandler"
           />
         </v-sheet>
       </v-col>
@@ -57,5 +58,10 @@ const setFormData = async (it: any) => {
 
 const deleteItemClickHandler = async (it:any) => {
   await store.deleteEmployee(it.id)
+}
+
+const goToBeneficiariesClickHandler = async (it:any) => {
+  await navigateTo('/beneficiarios/' + it.id + '-' + it.name)
+  await formStore.setForm({})
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-form>
+  <v-form v-model="validForm">
     <v-container>
       <v-row>
         <v-col cols="12" md="12">
@@ -14,8 +14,7 @@
           <v-text-field
               v-model="form.name"
               label="Nombre"
-              required
-              hide-details
+              :rules="requiredRules"
           ></v-text-field>
         </v-col>
 
@@ -26,8 +25,7 @@
           <v-text-field
               v-model="form.last_name"
               label="Apellidos"
-              hide-details
-              required
+              :rules="requiredRules"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -40,8 +38,8 @@
           <v-text-field
               v-model="form.birth_date"
               label="Fecha Nacimiento"
-              hide-details
-              required
+              placeholder="AAAA-mm-dd"
+              :rules="birthdateRules"
           ></v-text-field>
         </v-col>
         <template v-if="!props.beneficiaryContext">
@@ -52,8 +50,7 @@
             <v-text-field
                 v-model="form.employee_number"
                 label="No. Empleado"
-                hide-details
-                required
+                :rules="requiredRules"
             ></v-text-field>
           </v-col>
         </template>
@@ -65,8 +62,7 @@
             <v-text-field
                 v-model="form.participation_percentage"
                 label="Porcentaje de Participación"
-                hide-details
-                required
+                :rules="requiredRules"
             ></v-text-field>
           </v-col>
         </template>
@@ -80,8 +76,7 @@
           <v-text-field
               v-model="form.curp"
               label="CURP"
-              hide-details
-              required
+              :rules="requiredRules"
           ></v-text-field>
         </v-col>
 
@@ -92,8 +87,7 @@
           <v-text-field
               v-model="form.ssn"
               label="SSN"
-              hide-details
-              required
+              :rules="requiredRules"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -106,8 +100,7 @@
           <v-text-field
               v-model="form.phone_number"
               label="Teléfono"
-              hide-details
-              required
+              :rules="phoneRules"
           ></v-text-field>
         </v-col>
 
@@ -118,8 +111,7 @@
           <v-text-field
               v-model="form.nationality"
               label="Nacionalidad"
-              hide-details
-              required
+              :rules="requiredRules"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -150,9 +142,56 @@ const form = computed(() => store.$state.form)
 const formTitle = computed(() => store.$state.formTitle)
 const formBtnTitle = computed(() => store.$state.formButtonTitle)
 const editForm = computed(() => store.$state.editForm)
+const validForm = ref(false)
+
+const birthdateRules = ref([
+    (value: any) => {
+          if (value) return true
+
+          return 'Campo requerido.'
+    },
+    (value: any) => {
+          const now = new Date()
+          let birthdate = new Date(value)
+          let age = now.getFullYear() - birthdate.getFullYear()
+          let m = now.getMonth() - birthdate.getMonth()
+          if (m < 0 || (m === 0 && now.getDate() < birthdate.getDate())) {
+              age--;
+          }
+
+          if (age >= 18) return true
+
+          return 'Debes ser mayor de edad'
+    },
+])
+
+const phoneRules = ref([
+    (value: any) => {
+          if (value) return true
+
+          return 'Campo requerido.'
+    },
+    (value: any) => {
+        if (value?.length == 10 && /[0-9-]+/.test(value)) return true
+
+        return 'Telefono solo debe 10 digitos.'
+    }
+])
+
+const requiredRules = ref([
+  (value: any) => {
+    if (value) return true
+
+    return 'Campo requerido.'
+  }
+])
 
 const submitForm = async () => {
-  //validate form before emit
+  if (!validForm.value) {
+    alert('Hay errores en el formulario')
+    return
+  }
+
   if (!editForm.value) {
     await emit('submitForm', form.value)
   } else {

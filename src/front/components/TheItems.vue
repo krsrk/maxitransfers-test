@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts" setup>
-const emit = defineEmits(['editItemAction', 'deleteItemAction'])
+const emit = defineEmits(['editItemAction', 'deleteItemAction', 'goToBeneficiariesAction'])
 const props = defineProps({ data: Array, beneficiaryContext: Boolean })
 
 const editItemClickHandler = (it:any) => {
@@ -83,6 +83,6 @@ const deleteItemClickHandler = (it:any) => {
 }
 
 const goToBeneficiariesPageClickHandler = async (it:any) => {
-  await navigateTo('/beneficiarios/' + it.id + '-' + it.name)
+  emit('goToBeneficiariesAction', it)
 }
 </script>
