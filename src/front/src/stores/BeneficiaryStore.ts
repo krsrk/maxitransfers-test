@@ -1,15 +1,21 @@
+import {BeneficiariesService} from "~/src/services/BeneficiariesService"
+
+const beneficiaryService = new BeneficiariesService()
+
 export const useBeneficiaryStore = defineStore('BeneficiaryStore', {
     state: () => {
         return {
-            employees: []
+            employeeId: '',
+            beneficiaries: []
         }
     },
     actions: {
-        async getBeneficiaries() {
-
+        async getBeneficiaries(employeeId:any) {
+            this.$state.beneficiaries = await beneficiaryService.getBeneficiaries(employeeId)
         },
-        async createBeneficiary(data:Object) {
-
+        async createBeneficiary(employeeId:any, data:Object) {
+            await beneficiaryService.createBeneficiary(employeeId, data)
+            await this.getBeneficiaries(employeeId)
         },
         async updateBeneficiary(data:Object) {
 
@@ -17,5 +23,8 @@ export const useBeneficiaryStore = defineStore('BeneficiaryStore', {
         async deleteBeneficiary(beneficiaryId:any) {
 
         }
+    },
+    getters: {
+        getBeneficiariesData: state => state.beneficiaries,
     }
 })

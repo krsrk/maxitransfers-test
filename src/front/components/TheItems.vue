@@ -6,12 +6,20 @@
     >
       <thead>
       <tr>
-        <th class="text-left">
-          No. Empleado
-        </th>
+        <template v-if="!props.beneficiaryContext">
+          <th class="text-left">
+            No. Empleado
+          </th>
+        </template>
+
         <th class="text-left">
           Nombre
         </th>
+        <template v-if="props.beneficiaryContext">
+          <th class="text-left">
+            Porcentaje de Participación
+          </th>
+        </template>
         <th class="text-left">
           Acciones
         </th>
@@ -22,8 +30,16 @@
           v-for="item in props.data"
           :key="item.id"
       >
-        <td>{{ item.employee_number }}</td>
+        <template v-if="!props.beneficiaryContext">
+          <td>{{ item.employee_number }}</td>
+        </template>
+
         <td>{{ item.name + ' ' +item.last_name}}</td>
+
+        <template v-if="props.beneficiaryContext">
+          <td>{{ item.participation_percentage }}</td>
+        </template>
+
         <td>
           <v-icon
               size="small"
@@ -32,13 +48,15 @@
           >
             mdi-pencil
           </v-icon>
-          <v-icon
-              size="small"
-              class="me-2"
-              @click="editItem(item)"
-          >
-            mdi-account-details
-          </v-icon>
+          <template v-if="!props.beneficiaryContext">
+            <v-icon
+                size="small"
+                class="me-2"
+                @click="goToBeneficiariesPageClickHandler(item)"
+            >
+              mdi-account-details
+            </v-icon>
+          </template>
           <v-icon
               size="small"
               @click="deleteItemClickHandler(item)"
@@ -53,10 +71,8 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue';
-
 const emit = defineEmits(['editItemAction', 'deleteItemAction'])
-const props = defineProps({ data: Array })
+const props = defineProps({ data: Array, beneficiaryContext: Boolean })
 
 const editItemClickHandler = (it:any) => {
   emit('editItemAction', it)
@@ -64,5 +80,9 @@ const editItemClickHandler = (it:any) => {
 
 const deleteItemClickHandler = (it:any) => {
   emit('deleteItemAction', it)
+}
+
+const goToBeneficiariesPageClickHandler = async (it:any) => {
+  await navigateTo('/beneficiarios/' + it.id + '-' + it.name)
 }
 </script>

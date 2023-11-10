@@ -8,6 +8,7 @@
         <v-sheet rounded="lg">
           <TheItems
               :data="data"
+              :beneficiary-context="false"
               @edit-item-action="setFormData"
               @delete-item-action="deleteItemClickHandler"
           />
@@ -16,6 +17,7 @@
       <v-col>
         <v-sheet rounded="lg">
           <TheForm
+              :beneficiary-context="false"
               @submit-form="sendFormToCreateService"
               @submit-edit-form="sendFormToUpdateService"
           />
